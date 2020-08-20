@@ -1,0 +1,68 @@
+{
+  "name": "table-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Тестовое задание для ГК Триумф",
+  "scripts": {
+    "eslint": "eslint --ext .jsx --ext .js src/js",
+    "editorconfig": "editorconfig-cli",
+    "stylelint": "stylelint \"src/scss/**/*.scss\" --syntax scss",
+    "test": "npm run eslint && npm run editorconfig && npm run stylelint",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server",
+    "test.jest": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "7.10.2",
+    "@babel/preset-env": "7.10.2",
+    "@babel/preset-react": "7.10.1",
+    "@htmlacademy/editorconfig-cli": "1.x",
+    "autoprefixer": "9.8.6",
+    "babel-jest": "26.0.1",
+    "babel-loader": "8.1.0",
+    "css-loader": "4.2.1",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.2",
+    "eslint": "5.13.0",
+    "eslint-config-htmlacademy": "0.5.2",
+    "eslint-plugin-react": "7.20.0",
+    "html-webpack-plugin": "4.3.0",
+    "jest": "26.0.1",
+    "mini-css-extract-plugin": "0.10.0",
+    "node-sass": "4.14.1",
+    "normalize.css": "^8.0.1",
+    "postcss-loader": "3.0.0",
+    "react-test-renderer": "16.13.1",
+    "redux-devtools-extension": "2.13.8",
+    "redux-mock-store": "1.5.4",
+    "sass-loader": "9.0.3",
+    "stylelint": "10.1.x",
+    "stylelint-config-htmlacademy": "0.1.x",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.11.0"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "dependencies": {
+    "prop-types": "15.7.2",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-redux": "7.2.0",
+    "redux": "4.0.5",
+    "redux-thunk": "2.3.0",
+    "reselect": "4.0.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "Firefox ESR"
+  ],
+  "editorconfig-cli": [
+    "*.json",
+    "*.js",
+    "public/*.html",
+    "src/js/**/*.{js,jsx}",
+    "src/scss/**/*.{sass,scss}"
+  ]
+}
