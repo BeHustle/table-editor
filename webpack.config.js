@@ -13,7 +13,6 @@ module.exports = {
     open: true,
     inline: true,
     port: 1337,
-    historyApiFallback: true
   },
   module: {
     rules: [{
@@ -29,6 +28,38 @@ module.exports = {
         `css-loader`,
         `postcss-loader`,
         `sass-loader`
+      ]
+    }, {
+      test: /\.(jpe?g|png|gif|svg)$/,
+      use: [
+        {
+          loader: `file-loader`,
+          options: {
+            name: `img/[name].[ext]`,
+          }
+        },
+        {
+          loader: `image-webpack-loader`,
+          options: {
+            mozjpeg: {
+              progressive: true,
+              quality: 65
+            },
+            optipng: {
+              enabled: false,
+            },
+            pngquant: {
+              quality: `70-90`,
+              speed: 3
+            },
+            gifsicle: {
+              interlaced: false,
+            },
+            svgo: {
+              enabled: false,
+            }
+          }
+        }
       ]
     }]
   },
