@@ -12,6 +12,10 @@
   &:first-child .product__label {
     display: block;
   }
+
+  & .product__error {
+    border: 1px solid red;
+  }
 }
 
 .product__input,
@@ -22,8 +26,8 @@
 }
 
 .product__container {
-  flex-grow: 1;
   margin-left: 20px;
+  width: 25%;
 
   &:first-child {
     margin-left: 0;
@@ -49,7 +53,7 @@
 }
 
 .product__controls {
-  width: 200px;
+  width: auto;
   margin-left: 20px;
   align-self: flex-end;
   padding-bottom: 32px;
