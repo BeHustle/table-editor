@@ -1,18 +1,21 @@
 import React, {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {ColorTypes, ProductTypes} from '../constants.js';
+import {ColorTypes, DEFAULT_COLOR_TYPE, ProductTypes, cover, popover} from '../constants.js';
 import {extend} from '../utils.js';
+import {ChromePicker} from 'react-color';
+import convert from 'color-convert';
 
 const ERROR_CLASS = `product__error`;
 
 const ModifierInput = ({children, modifier, onDataChange, onValidityChange, modifierNeedClear, onModifierClear}) => {
-  const {id, name = ``, type = ``, color = ``, colorType = ColorTypes[0]} = modifier;
-  const initialState = {id, name, type, color, colorType};
+  const {id, position, name = ``, type = ``, color = ``, colorType = DEFAULT_COLOR_TYPE} = modifier;
+  const initialState = {id, name, type, color, colorType, position};
   const productTypeRef = useRef(null);
   const inputNameRef = useRef(null);
   const inputColorRef = useRef(null);
   const colorTypesRef = useRef(null);
   const [state, setState] = useState(initialState);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const toggleError = (data, ref) => {
     if (data) {
@@ -20,6 +23,13 @@ const ModifierInput = ({children, modifier, onDataChange, onValidityChange, modi
     } else {
       ref.current.classList.add(ERROR_CLASS);
     }
+  };
+
+  const convertFromDefaultColorType = () => {
+    if (state.colorType === DEFAULT_COLOR_TYPE) {
+      return state.color;
+    }
+    return convert[DEFAULT_COLOR_TYPE][state.colorType](state.color);
   };
 
   const validate = () => {
@@ -38,6 +48,11 @@ const ModifierInput = ({children, modifier, onDataChange, onValidityChange, modi
   const dataChangeHandler = (evt, key) => {
     const {value} = evt.currentTarget;
     setState((prev) => extend(prev, {[key]: value}));
+  };
+
+  const colorChangeHandler = (colorChecked) => {
+    const evt = {currentTarget: {value: colorChecked.hex}};
+    dataChangeHandler(evt, `color`);
   };
 
   useEffect(() => {
@@ -66,7 +81,7 @@ const ModifierInput = ({children, modifier, onDataChange, onValidityChange, modi
             key={item.value}
             value={item.value}>
             {item.name}
-          </option>
+          </option>,
         )}
       </select>
     </div>
@@ -76,18 +91,22 @@ const ModifierInput = ({children, modifier, onDataChange, onValidityChange, modi
     </div>
     <div className="product__container">
       <label htmlFor={`product-color-${id}`} className="product__label">Цвет модификатора</label>
-      <input id={`product-color-${id}`} onChange={(evt) => dataChangeHandler(evt, `color`)} ref={inputColorRef} className="product__input" type="text" value={state.color} placeholder="Например, #ff00ff" />
+      <input id={`product-color-${id}`} ref={inputColorRef} className="product__input" type="text" onClick={() => setShowColorPicker(true)} value={convertFromDefaultColorType()} readOnly={true} placeholder="Нажмите для выбора"/>
+      {showColorPicker ? <div style={popover}>
+        <div style={cover} onClick={() => setShowColorPicker(false)}/>
+        <ChromePicker defaultView={state.colorType} color={state.color} onChangeComplete={colorChangeHandler} disableAlpha={true}/>
+      </div> : null }
       <div className="product__radio-group" ref={colorTypesRef}>
-        {ColorTypes.map((item) =>
-          <label key={item} className="product__radio-label">
+        {Object.keys(ColorTypes).map((key) =>
+          <label key={key} className="product__radio-label">
             <input
               type="radio"
-              value={item}
+              value={ColorTypes[key]}
               name={`product-color-type-${id}`}
-              checked={state.colorType === item}
+              checked={state.colorType === ColorTypes[key]}
               onChange={(evt) => dataChangeHandler(evt, `colorType`)}/>
-            {item}
-          </label>
+            {key}
+          </label>,
         )}
       </div>
     </div>
@@ -101,13 +120,14 @@ ModifierInput.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
     color: PropTypes.string,
-    colorType: PropTypes.oneOf(ColorTypes),
+    colorType: PropTypes.oneOf(Object.values(ColorTypes)),
     type: PropTypes.oneOf(ProductTypes.map((item) => item.value)),
+    position: PropTypes.number.isRequired,
   }).isRequired,
   onDataChange: PropTypes.func.isRequired,
   onValidityChange: PropTypes.func,
   modifierNeedClear: PropTypes.bool,
-  onModifierClear: PropTypes.func
+  onModifierClear: PropTypes.func,
 };
 
 export default ModifierInput;

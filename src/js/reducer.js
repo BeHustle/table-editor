@@ -1,5 +1,5 @@
 import {getModifiers} from './selectors.js';
-import {copyObj, extend, getIndex} from './utils.js';
+import {copyObj, delObjFromArr, extend, getIndex} from './utils.js';
 
 const initialState = {
   modifiers: [],
@@ -66,7 +66,7 @@ export const Operation = {
   },
   addModifier: (modifier) => (dispatch, getState) => {
     const modifierId = getModifiers(getState()).length + 1;
-    const newModifier = Object.assign({}, modifier, {id: modifierId});
+    const newModifier = extend(modifier, {id: modifierId, position: modifierId});
     dispatch(addModifier(newModifier));
     updateStorage(getState());
   },
@@ -93,7 +93,7 @@ const reducer = (state = initialState, action = {}) => {
     case ActionTypes.SET_MODIFIERS:
       return extend(state, {modifiers: action.payload});
     case ActionTypes.ADD_MODIFIER:
-      return extend(state, {modifiers: [...state.modifiers, action.payload]});
+      return extend(state, {modifiers: [...state.modifiers.slice(), action.payload]});
     case ActionTypes.SET_MODIFIER_CLEAR:
       return extend(state, {modifierNeedClear: action.payload});
     case ActionTypes.UPDATE_MODIFIER:
@@ -119,13 +119,19 @@ const reducer = (state = initialState, action = {}) => {
       }
       const toDownIndex = toUpIndex - 1;
       const upModifiers = state.modifiers.slice();
-      const toUpModifier = copyObj(upModifiers[toUpIndex]);
-      const toDownModifier = copyObj(upModifiers[toDownIndex]);
-      toUpModifier.id--;
-      toDownModifier.id++;
-      upModifiers[toUpIndex] = toDownModifier;
-      upModifiers[toDownIndex] = toUpModifier;
+      upModifiers[toUpIndex].position--;
+      upModifiers[toDownIndex].position++;
       return extend(state, {modifiers: upModifiers});
+    case ActionTypes.DOWN_MODIFIER:
+      const toDownIndex2 = getIndex(state.modifiers, action.payload);
+      if (toDownIndex2 === -1 || toDownIndex2 === (state.modifiers.length - 1)) {
+        return state;
+      }
+      const toUpIndex2 = toDownIndex2 + 1;
+      const downModifiers = state.modifiers.slice();
+      downModifiers[toDownIndex2].position++;
+      downModifiers[toUpIndex2].position--;
+      return extend(state, {modifiers: downModifiers});
     default:
       return state;
   }
