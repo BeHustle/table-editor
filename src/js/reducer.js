@@ -4,7 +4,6 @@ import {extend, getIndex} from './utils.js';
 const initialState = {
   modifiers: [],
   modifierNeedClear: false,
-  test: false
 };
 
 const ActionTypes = {
@@ -15,7 +14,6 @@ const ActionTypes = {
   SET_MODIFIER_CLEAR: `SET_MODIFIER_CLEAR`,
   UP_MODIFIER: `UP_MODIFIER`,
   DOWN_MODIFIER: `DOWN_MODIFIER`,
-  TEST: `TEST`
 };
 
 const addModifier = (modifier) => ({
