@@ -1,9 +1,12 @@
 import React, {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {ColorTypes, DEFAULT_COLOR_TYPE, ProductTypes, cover, popover} from '../constants.js';
+import {setModifierClear} from '../reducer.js';
+import {getModifierNeedClear} from '../selectors.js';
 import {extend} from '../utils.js';
 import {ChromePicker} from 'react-color';
 import convert from 'color-convert';
+import {connect} from 'react-redux';
 
 const ERROR_CLASS = `product__error`;
 
@@ -126,8 +129,18 @@ ModifierInput.propTypes = {
   }).isRequired,
   onDataChange: PropTypes.func.isRequired,
   onValidityChange: PropTypes.func,
-  modifierNeedClear: PropTypes.bool,
-  onModifierClear: PropTypes.func,
+  modifierNeedClear: PropTypes.bool.isRequired,
+  onModifierClear: PropTypes.func.isRequired,
 };
 
-export default ModifierInput;
+const mapStateToProps = (state) => ({
+  modifierNeedClear: getModifierNeedClear(state)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onModifierClear() {
+    dispatch(setModifierClear(false));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModifierInput);

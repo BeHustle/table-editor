@@ -3,6 +3,7 @@ import {Operation} from '../reducer.js';
 import {extend} from '../utils.js';
 import ModifierInput from './modifier-input.jsx';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 const ExistModifier = (props) => {
   const {
@@ -43,6 +44,15 @@ const ExistModifier = (props) => {
       </button>
     </div>
   </ModifierInput>;
+};
+
+ExistModifier.propTypes = {
+  onModifierChange: PropTypes.func.isRequired,
+  onModifierDelete: PropTypes.func.isRequired,
+  onModifierUp: PropTypes.func.isRequired,
+  onModifierDown: PropTypes.func.isRequired,
+  isFirst: PropTypes.bool.isRequired,
+  isLast: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Operation, setModifierClear} from '../reducer.js';
+import PropTypes from 'prop-types';
 import {extend} from '../utils.js';
 import ModifierInput from './modifier-input.jsx';
 import {connect} from 'react-redux';
@@ -33,16 +34,15 @@ const NewModifier = (props) => {
   </ModifierInput>;
 };
 
+NewModifier.propTypes = {
+  onModifierAdd: PropTypes.func.isRequired
+};
+
 const mapDispatchToProps = (dispatch) => ({
   onModifierAdd(modifier) {
     dispatch(Operation.addModifier(modifier));
     dispatch(setModifierClear(true));
   },
-  onModifierClear() {
-    dispatch(setModifierClear(false));
-  }
 });
 
-const mapStateToProps = ({modifierNeedClear}) => ({modifierNeedClear});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewModifier);
+export default connect(null, mapDispatchToProps)(NewModifier);

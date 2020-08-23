@@ -1,5 +1,5 @@
 import {getModifiers} from './selectors.js';
-import {copyObj, delObjFromArr, extend, getIndex} from './utils.js';
+import {extend, getIndex} from './utils.js';
 
 const initialState = {
   modifiers: [],
